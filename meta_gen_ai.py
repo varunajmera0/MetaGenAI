@@ -171,7 +171,8 @@ with col1:
         st.error(e)
 
 with col2:
-    tab1, tab2, tab3, tab4 = st.tabs(["Granularity", "File Meta", "Semantic Context", "Data Analysis"])
+    # tab1, tab2, tab3, tab4 = st.tabs(["Granularity", "File Meta", "Semantic Context", "Data Analysis"])
+    tab1, tab2, tab4 = st.tabs(["Granularity", "File Meta", "Data Analysis"])
     with tab1:
         if submit_button:
             with st.spinner("Request. Respond. Repeat. With Meta Gen AI"):
@@ -214,58 +215,58 @@ with col2:
         except Exception as e:
             st.error(e)
 
-    with tab3:
-        import pandas as pd
-        import nltk
-
-        # Check if the required data has already been downloaded
-        try:
-            nltk.data.find('tokenizers/punkt')
-            nltk.data.find('corpora/stopwords.zip')
-            nltk.data.find('corpora/wordnet.zip')
-            required_data_downloaded = True
-        except LookupError:
-            required_data_downloaded = False
-
-        # If the required data has not been downloaded, download it
-        if not required_data_downloaded:
-            nltk.download('punkt')
-            nltk.download('stopwords')
-            nltk.download('wordnet')
-
-        def extract_metadata(column_name, df):
-            try:
-                from textblob import TextBlob
-                column_data = df[column_name].dropna().tolist()
-
-                # Convert column_data to strings if they are not numeric
-                if not pd.api.types.is_numeric_dtype(column_data):
-                    column_data = [str(value) for value in column_data]
-
-                blob = TextBlob(" ".join(column_data))
-                noun_phrases = blob.noun_phrases
-                metadata = {
-                    "Column Name": column_name,
-                    "Data Type": df[column_name].dtype,
-                    "Unique Values": len(set(column_data)),
-                    "Sample Values": column_data[:5],
-                    "Semantic Context": noun_phrases
-                }
-                return metadata
-            except Exception as e:
-                raise Exception(e)
-
-        with st.spinner("Request. Respond. Repeat. With Meta Gen AI"):
-            try:
-                for file_data in files_data:
-                    st.title(file_data[0])
-                    df = file_data[1].convert_dtypes()
-                    metadata_list = [extract_metadata(col, df.head(1000)) for col in file_data[2]]
-                    # Create a DataFrame to store the extracted metadata
-                    metadata_df = pd.DataFrame(metadata_list)
-                    st.dataframe(metadata_df)
-            except Exception as e:
-                st.error(e)
+    # with tab3:
+    #     import pandas as pd
+    #     import nltk
+    #
+    #     # Check if the required data has already been downloaded
+    #     try:
+    #         nltk.data.find('tokenizers/punkt')
+    #         nltk.data.find('corpora/stopwords.zip')
+    #         nltk.data.find('corpora/wordnet.zip')
+    #         required_data_downloaded = True
+    #     except LookupError:
+    #         required_data_downloaded = False
+    #
+    #     # If the required data has not been downloaded, download it
+    #     if not required_data_downloaded:
+    #         nltk.download('punkt')
+    #         nltk.download('stopwords')
+    #         nltk.download('wordnet')
+    #
+    #     def extract_metadata(column_name, df):
+    #         try:
+    #             from textblob import TextBlob
+    #             column_data = df[column_name].dropna().tolist()
+    #
+    #             # Convert column_data to strings if they are not numeric
+    #             if not pd.api.types.is_numeric_dtype(column_data):
+    #                 column_data = [str(value) for value in column_data]
+    #
+    #             blob = TextBlob(" ".join(column_data))
+    #             noun_phrases = blob.noun_phrases
+    #             metadata = {
+    #                 "Column Name": column_name,
+    #                 "Data Type": df[column_name].dtype,
+    #                 "Unique Values": len(set(column_data)),
+    #                 "Sample Values": column_data[:5],
+    #                 "Semantic Context": noun_phrases
+    #             }
+    #             return metadata
+    #         except Exception as e:
+    #             raise Exception(e)
+    #
+    #     with st.spinner("Request. Respond. Repeat. With Meta Gen AI"):
+    #         try:
+    #             for file_data in files_data:
+    #                 st.title(file_data[0])
+    #                 df = file_data[1].convert_dtypes()
+    #                 metadata_list = [extract_metadata(col, df.head(1000)) for col in file_data[2]]
+    #                 # Create a DataFrame to store the extracted metadata
+    #                 metadata_df = pd.DataFrame(metadata_list)
+    #                 st.dataframe(metadata_df)
+    #         except Exception as e:
+    #             st.error(e)
 
     with tab4:
         import matplotlib.pyplot as plt
