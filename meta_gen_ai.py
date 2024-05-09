@@ -10,11 +10,6 @@ st.set_page_config(layout="wide",
 st.header("MetaGenAI :wave:", divider='rainbow')
 st.markdown("###### Where Data Meets Clarity")
 
-import subprocess
-cmd = ['python3','-m','textblob.download_corpora']
-subprocess.run(cmd)
-print("Working")
-
 class FileTypeIdentification:
     def __init__(self):
         self.files_type = ['Apache ORC', 'Apache Parquet', 'CSV', 'ascii text', 'JSON'] #ascii text for json
